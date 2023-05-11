@@ -3,13 +3,15 @@ from fastapi_paginate import add_pagination
 from starlette.middleware.cors import CORSMiddleware
 
 from core.config import settings
+from app.api.v1.base import api_router
 
 
 app = FastAPI(title=settings.PROJECT_TITLE, version=settings.PROJECT_VERSION)
+app.include_router(api_router)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "*",
         "http://localhost",
         "http://localhost:3000",
     ],
@@ -23,7 +25,7 @@ add_pagination(app)
 
 @app.get('/')
 def hello_api():
-    return {"detail": 'hello!!'}
+    return {'detail': 'hello!!'}
 
 
 if __name__ == '__main__':

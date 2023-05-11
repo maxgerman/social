@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, TIMESTAMP, func
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 
-from db.base_class import Base
+from app.db.base_class import Base
 
 
 class Storage(Base):
@@ -12,6 +12,7 @@ class Storage(Base):
     filename = Column(String, nullable=False)
     content_type = Column(String, nullable=False)
     created = Column(TIMESTAMP, server_default=func.now())
+
     user = relationship('User', back_populates='storage')
 
 

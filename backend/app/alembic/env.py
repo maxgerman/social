@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 from logging.config import fileConfig
 from pathlib import Path
 
@@ -15,14 +16,16 @@ config = context.config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 logging.basicConfig(level=logging.DEBUG)
-
-if os.name == 'nt':
-    env_path = BASE_DIR.parent / 'deploy' / '.env_local'
-else:
-    env_path = BASE_DIR.parent / 'deploy' / '.env'
-load_dotenv(env_path)
-
 logger = logging.getLogger(__name__)
+
+env_path = BASE_DIR.parent.parent / 'deploy' / '.env_local'
+if not env_path.exists():
+    env_path = BASE_DIR.parent.parent / 'deploy' / '.env'
+if not env_path.exists():
+    logger.warning(f'env file not found: {env_path}')
+    sys.exit(1)
+
+load_dotenv(env_path)
 logger.debug(f'loaded env from {env_path}')
 
 POSTGRES_USER: str = os.getenv('POSTGRES_USER')
@@ -31,7 +34,6 @@ POSTGRES_SERVER: str = os.getenv('POSTGRES_SERVER')
 POSTGRES_PORT: str = os.getenv('POSTGRES_PORT')
 POSTGRES_DB: str = os.getenv('POSTGRES_DB')
 DATABASE_URL: str = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
-
 
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
 # Interpret the config file for Python logging.
@@ -46,7 +48,9 @@ if config.config_file_name is not None:
 
 from models import *
 from db.base_class import Base
+
 target_metadata = Base.metadata
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

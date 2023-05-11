@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, func
 from sqlalchemy.orm import relationship
 
-from db.base_class import Base
+from app.db.base_class import Base
 
 
 class User(Base):
@@ -13,6 +13,7 @@ class User(Base):
     last_login = Column(TIMESTAMP, server_default=func.now())
     last_activity = Column(TIMESTAMP, server_default=func.now())
     created = Column(TIMESTAMP, server_default=func.now())
+
     profile = relationship('Profile', back_populates='user', uselist=False)
     storage = relationship('Storage', back_populates='user')
     posts = relationship('Post', back_populates='user')
