@@ -18,7 +18,7 @@ from app.api.v1.dependencies import get_current_user, super_user
 from app.core.auth import authenticate, create_access_token, jwt_decode, verify_last_login
 from app.core.auth import create_pwd_reset_token
 from app.core.config import settings
-from app.core.email import send_email_in_background
+from app.core.email import send_email_notification
 from app.core.pagination import CustomPage
 from app.core.security import get_password_hash
 from app.db.session import get_db
@@ -42,14 +42,14 @@ def user_register(*, db: Session = Depends(get_db),
     user_db = crud.create_user_and_profile(db, user_in)
 
     email_notification = EmailNotificationSchema(
-        email=user.email,
+        email=user_in.email,
         subject='Welcome in the Social project',
         title='Welcome',
         text='You have successfully registered in the Social project',
         url=f'{settings.FRONTEND_URL}',
         button_caption='Go to the site')
 
-    send_email_in_background(email_notification, background_tasks)
+    background_tasks.add_task(send_email_notification, email_notification)
     return user_db
 
 
@@ -77,7 +77,7 @@ def me(user: User = Depends(get_current_user)):
 
 
 @router.get('/forgot-password/{email}')
-def forgot_password(*, email: str = Path(..., min_length=1, max_length=100),
+async def forgot_password(*, email: str = Path(..., min_length=1, max_length=100),
                     db: Session = Depends(get_db),
                     background_tasks: BackgroundTasks):
     """Check if email exists and send the password reset link to email"""
@@ -96,12 +96,12 @@ def forgot_password(*, email: str = Path(..., min_length=1, max_length=100),
         url=f'{settings.FRONTEND_URL}/reset-password/{reset_token}',
         button_caption='Reset password on site')
 
-    send_email_in_background(email_notification, background_tasks)
+    background_tasks.add_task(send_email_notification, email_notification)
 
-    return {'sent_to_email': user.email}
+    return {'enqueued_email_to': user.email}
 
 
-@router.post('/change-password/{token}')
+@router.post('/reset-password/{token}')
 def change_password(token: str = Path(..., max_length=300),
                     db: Session = Depends(get_db),
                     new_password: str = Body(...),

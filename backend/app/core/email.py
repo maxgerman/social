@@ -1,4 +1,5 @@
 import logging
+import asyncio
 
 import fastapi_mail.errors
 from fastapi_mail import MessageSchema, FastMail, schemas
@@ -10,8 +11,9 @@ from app.schemas.notifications import EmailNotificationSchema
 logger = logging.getLogger(__name__)
 
 
-def send_email_in_background(email_notification: EmailNotificationSchema, background_tasks: BackgroundTasks):
+async def send_email_notification(email_notification: EmailNotificationSchema):
     """Send email with content of the NotificationAddSchema in background"""
+    await asyncio.sleep(0)
     message_schema = MessageSchema(
         recipients=[email_notification.email],
         subject=email_notification.subject,
@@ -20,7 +22,7 @@ def send_email_in_background(email_notification: EmailNotificationSchema, backgr
     )
     try:
         fm = FastMail(settings.email_conf)
-        background_tasks.add_task(fm.send_message, message_schema, 'generic_email.html')
+        await fm.send_message(message_schema, 'generic_email.html')
         logger.debug(
             'Sent email to: ' + str(message_schema.recipients) + ' with body: ' + str(email_notification.dict()))
     except fastapi_mail.errors.ConnectionErrors as e:
