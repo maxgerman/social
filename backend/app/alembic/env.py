@@ -15,6 +15,9 @@ config = context.config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# add base dir parent to python path
+sys.path.append(str(BASE_DIR.parent))
+
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
@@ -46,8 +49,8 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-from models import *
-from db.base_class import Base
+from app.models import *
+from app.db.base_class import Base
 
 target_metadata = Base.metadata
 
