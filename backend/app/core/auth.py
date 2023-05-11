@@ -1,20 +1,13 @@
-import re
-from typing import Optional, MutableMapping, List, Union
 from datetime import datetime, timedelta
-from uuid import uuid4
+from typing import Optional, MutableMapping, List, Union
 
-from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from pydantic import BaseModel
-from sqlalchemy.orm.session import Session
 from jose import jwt
-from starlette.background import BackgroundTasks
+from sqlalchemy.orm.session import Session
 
-from app.core.email import send_password_email
-from app.models.users import User
 from app.core.config import settings
-from app.core.security import verify_password, get_password_hash
-from app.schemas.users import UserUpdateSchema
+from app.core.security import verify_password
+from app.models.users import User
 
 JWTPayloadMapping = MutableMapping[
     str, Union[datetime, bool, str, List[str], List[int]]
@@ -29,10 +22,11 @@ def authenticate(
         password: str,
         db: Session,
 ) -> Optional[User]:
+    """Authenticate user by email and password. Return user or None"""
     user = db.query(User).filter(User.email == email).first()
     if not user:
         return None
-    if not verify_password(password, user.password):  # 1
+    if not verify_password(password, user.password):
         return None
     return user
 
@@ -44,7 +38,7 @@ def create_access_token(*, sub: str, remember=False) -> str:  # 2
         token_period = settings.ACCESS_TOKEN_EXPIRE_MINUTES
     return _create_token(
         token_type="access_token",
-        lifetime=timedelta(minutes=token_period),  # 3
+        lifetime=timedelta(minutes=token_period),
         sub=sub,
     )
 
@@ -68,13 +62,13 @@ def _create_token(
     payload = {}
     expire = datetime.utcnow() + lifetime
     payload["type"] = token_type
-    payload["exp"] = expire  # 4
-    payload["iat"] = datetime.utcnow()  # 5
-    payload["sub"] = str(sub)  # 6
+    payload["exp"] = expire
+    payload["iat"] = datetime.utcnow()
+    payload["sub"] = str(sub)
     if extra:
         payload.update(extra)
 
-    return jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)  # 8
+    return jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
 
 
 def jwt_decode(token):
@@ -84,11 +78,7 @@ def jwt_decode(token):
     return payload
 
 
-def verify_last_login(token_data: dict, str_to_compare: str) -> bool:
-    if 'jti' not in token_data or token_data['jti'] != str_to_compare:
+def verify_last_login(token_data: dict, last_login: str) -> bool:
+    if 'jti' not in token_data or token_data['jti'] != last_login:
         return False
     return True
-
-
-
-

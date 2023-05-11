@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <style>
+      .button {
+        background-color: #1c87c9;
+        border: none;
+        color: white;
+        padding: 20px 34px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 20px;
+        margin: 4px 2px;
+        cursor: pointer;
+        width: 100px;
+      }
+    </style>
+</head>
+<body>
+    <div style="margin: 0 auto;background-color: beige; border: solid 1px black; padding: 10px">
+        <h1>{{title}}</h1>
+        <p>{{text}}</p>
+
+
+        {% if button_caption is defined and button_caption %}
+            <form>
+                <a href="{{url}}" class="button">{{button_caption}}</a>
+            </form>
+        {% endif %}
+
+</body>
+</html>

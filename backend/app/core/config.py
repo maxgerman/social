@@ -42,6 +42,8 @@ class Settings:
     JWT_ALGORITHM = 'HS256'
     API_URL_PREFIX: str = '/api/v1'
 
+    FRONTEND_URL: str = os.getenv('FRONTEND_URL', 'http://127.0.0.1')
+
     CHAT_FILE_UPLOAD_MAX_SIZE = int(os.getenv('CHAT_FILE_UPLOAD_MAX_SIZE'))
 
     SEND_EMAILS = strtobool(os.getenv('SEND_EMAILS', 'True'))
