@@ -9,6 +9,7 @@ from fastapi_mail import ConnectionConfig
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger('multipart').setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -44,7 +45,7 @@ class Settings:
 
     FRONTEND_URL: str = os.getenv('FRONTEND_URL', 'http://127.0.0.1')
 
-    CHAT_FILE_UPLOAD_MAX_SIZE = int(os.getenv('CHAT_FILE_UPLOAD_MAX_SIZE'))
+    UPLOADS_PATH = BASE_DIR / Path('uploads')
 
     SEND_EMAILS = strtobool(os.getenv('SEND_EMAILS', 'True'))
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
