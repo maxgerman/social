@@ -18,6 +18,8 @@ services:
       - ./../backend/uploads/:/app/uploads
     env_file:
       - ./.env
+    depends_on:
+      - postgres
 
 
   postgres:
@@ -38,6 +40,7 @@ services:
 
 
   mailhog:
+    container_name: social_mailhog
     image: 'mailhog/mailhog:latest'
     ports:
       - "1025:1025"
