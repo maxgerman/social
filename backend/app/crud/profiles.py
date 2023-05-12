@@ -5,7 +5,7 @@ import sqlalchemy.exc
 from fastapi import HTTPException
 from fastapi_paginate.ext.sqlalchemy import paginate
 from sqlalchemy.orm import Session
-from sqlalchemy import select, func, Select
+from sqlalchemy import select, func, orm
 
 from models import Post, Following
 from schemas.profiles import ProfileUpdateSchema
@@ -59,22 +59,23 @@ def query_all_profiles_sorted_by(db, sort_by: PROFILE_SORTING_TYPE):
     return query
 
 
-def filter_profiles_query(stmt: Select, filter_by: PROFILE_FILTER_TYPE, profile_id: int):
+def filter_profiles_query(query: orm.Query,
+                          filter_by: PROFILE_FILTER_TYPE, profile_id: int):
     if filter_by == 'followers':
-        followers_ids_subq = select(Following.profile_by_id).where(Following.profile_to_id == profile_id).distinct(
+        followers_ids_subq = select(Following.profile_by_id).where(Following.profile_whom_id == profile_id).distinct(
         ).subquery()
-        stmt = stmt.filter(Profile.id.in_(followers_ids_subq))
+        query = query.filter(Profile.id.in_(followers_ids_subq))
     elif filter_by == 'subbed':
-        subbed_ids_subq = select(Following.profile_to_id).where(Following.profile_by_id == profile_id).distinct(
+        subbed_ids_subq = select(Following.profile_whom_id).where(Following.profile_by_id == profile_id).distinct(
         ).subquery()
-        stmt = stmt.filter(Profile.id.in_(subbed_ids_subq))
+        query = query.filter(Profile.id.in_(subbed_ids_subq))
     elif filter_by == 'all':
         pass
-    return stmt
+    return query
 
 
-def paginate_profile_query(db: Session, stmt: Select, params: CustomParams):
-    page = paginate(stmt, params)
+def paginate_query_by_params(db: Session, query: orm.Query, params: CustomParams):
+    page = paginate(query, params)
     return page
 
 

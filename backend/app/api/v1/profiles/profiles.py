@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 import crud
 from api.v1.dependencies import get_current_profile
+from api.v1.posts.posts import router_common as posts_common_router
 from core import storage
 from core.pagination import CustomParams, CustomPage
 from crud import PROFILE_SORTING_TYPE, PROFILE_FILTER_TYPE
@@ -44,7 +45,7 @@ def get_profiles(db: Session = Depends(get_db),
                  ):
     all_profiles_sorted_query = crud.query_all_profiles_sorted_by(db, sort_by)
     profiles_filtered_query = crud.filter_profiles_query(all_profiles_sorted_query, filter_by, profile.id)
-    profiles_page = crud.paginate_profile_query(db, profiles_filtered_query, params)
+    profiles_page = crud.paginate_query_by_params(db, profiles_filtered_query, params)
     return profiles_page
 
 
@@ -74,16 +75,7 @@ def delete_profile_image(db: Session = Depends(get_db),
             'profile_id': profile.id}
 
 
-@router.get('/{profile_id}', response_model=ProfileOutWithPostsCountSchema)
-def get_profile(profile_id: int,
-                db: Session = Depends(get_db),
-                profile: Profile = Depends(get_current_profile)):
-    """Get profile by id"""
-    profile = crud.get_profile_by_id(db, profile_id)
-    if not profile:
-        raise HTTPException(404, 'Profile not found')
-    profile.posts_count = crud.get_posts_count_by_profile_id(db, profile.id)
-    return profile
+router.include_router(posts_common_router, prefix='/{profile_id}/posts', tags=['posts'])
 
 
 @router.post('/{profile_id}/follow', status_code=200)
@@ -116,3 +108,16 @@ def unfollow_profile(profile_id: int,
         raise HTTPException(400, 'This profile is not followed')
     return {'message': 'profile unfollowed',
             'profile_id': profile_id}
+
+
+@router.get('/{profile_id}', response_model=ProfileOutWithPostsCountSchema)
+def get_profile(profile_id: int,
+                db: Session = Depends(get_db),
+                profile: Profile = Depends(get_current_profile)):
+    """Get profile by id"""
+    profile = crud.get_profile_by_id(db, profile_id)
+    if not profile:
+        raise HTTPException(404, 'Profile not found')
+    profile.posts_count = crud.get_posts_count_by_profile_id(db, profile.id)
+    return profile
+
