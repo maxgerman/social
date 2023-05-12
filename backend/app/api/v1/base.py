@@ -5,6 +5,7 @@ from app.api.v1.users import users
 from app.api.v1.profiles import profiles
 from app.api.v1.storage import storage
 from app.api.v1.posts import posts
+from app.api.v1.likes import likes
 from app.core.config import settings
 
 api_router = APIRouter()
@@ -16,3 +17,4 @@ api_router.include_router(profiles.router, prefix=url_prefix + "/profiles", tags
 api_router.include_router(storage.router, prefix=url_prefix + "/storage", tags=["storage"])
 api_router.include_router(posts.router_common, prefix=url_prefix + "/posts", tags=["posts"])
 api_router.include_router(posts.router_create, prefix=url_prefix + "/posts", tags=["posts"])
+api_router.include_router(likes.router, prefix=url_prefix + "/likes", tags=["likes"])

@@ -11,7 +11,7 @@ T = TypeVar("T")
 
 
 class CustomParams(Params):
-    size: int = Query(5, ge=1, le=1_000, description="Page size")
+    size: int = Query(10, ge=1, le=1_000, description="Page size")
 
 
 class CustomPage(BasePage[T], Generic[T]):

@@ -2,16 +2,10 @@ from typing import Optional, Literal
 from uuid import UUID
 
 import sqlalchemy.exc
-from fastapi import HTTPException
-from fastapi_paginate.ext.sqlalchemy import paginate
-from sqlalchemy.orm import Session
 from sqlalchemy import select, func, orm
+from sqlalchemy.orm import Session
 
-from crud import get_profile_by_id
 from models import Post, Following, Like
-from schemas.profiles import ProfileUpdateSchema
-from app.core.pagination import CustomParams
-from app.models.profiles import Profile
 
 
 def query_all_posts_sorted_by(db: Session, sort_by: Literal['new', 'likes']):
