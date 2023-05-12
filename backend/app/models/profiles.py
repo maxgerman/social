@@ -18,21 +18,9 @@ class Profile(Base):
     image_id = Column(UUID(as_uuid=True), nullable=True)
     gender = Column(String, Enum('MALE', 'FEMALE'), nullable=True)
     bio = Column(String, nullable=False, default='')
-    user = relationship('User', back_populates='profile')
-    likes_got = relationship('Like', back_populates='liked_profile', foreign_keys=[Like.liked_profile_id])
-    likes_made = relationship('Like', back_populates='profile', foreign_keys=[Like.profile_id])
 
-    # async def like_by(self, liker: 'Profile'):
-    #     """Like this profile by another profile """
-    #     from db.session import SessionLocal
-    #     from models.likes import Like
-    #     with SessionLocal() as db:
-    #         like = Like(member_id=liker.id, liked_member_id=self.id, is_new=True)
-    #         db.add(like)
-    #         try:
-    #             db.commit()
-    #         except sqlalchemy.exc.IntegrityError as err:
-    #             logger.warning(f'Like already exists for {self.id} by member {liker.id}')
-    #             return
-    #         logger.debug(f'Like created: by member {liker.id=} for member {self.id}')
-    #     return like
+    user = relationship('User', back_populates='profile')
+    posts = relationship('Post', back_populates='profile')
+    likes_made = relationship('Like', back_populates='profile', foreign_keys=[Like.profile_id])
+    following = relationship('Following', back_populates='profile_by', foreign_keys='Following.profile_by_id')
+    subscribers = relationship('Following', back_populates='profile_whom', foreign_keys='Following.profile_whom_id')

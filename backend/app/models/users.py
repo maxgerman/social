@@ -16,4 +16,3 @@ class User(Base):
 
     profile = relationship('Profile', back_populates='user', uselist=False)
     storage = relationship('Storage', back_populates='user')
-    posts = relationship('Post', back_populates='user')

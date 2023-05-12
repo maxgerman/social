@@ -3,11 +3,11 @@ from fastapi import HTTPException
 from fastapi_paginate.ext.sqlalchemy import paginate
 from sqlalchemy.orm import Session
 
-from ..core.pagination import CustomParams
-from ..core.security import get_password_hash
-from ..models.profiles import Profile
-from ..models.users import User
-from ..schemas.users import UserRegisterSchema, UserUpdateSchema
+from app.core.pagination import CustomParams
+from app.core.security import get_password_hash
+from app.models.profiles import Profile
+from app.models.users import User
+from app.schemas.users import UserRegisterSchema, UserUpdateSchema
 
 
 def create_user_and_profile(db: Session, user_in: UserRegisterSchema):
@@ -23,7 +23,7 @@ def create_user_and_profile(db: Session, user_in: UserRegisterSchema):
     return user_db
 
 
-def get_user_by_id(db: Session, user_id: int):
+def get_user_by_id(db: Session, user_id: int) -> User | None:
     """Return user by id or None"""
     return db.query(User).filter(User.id == user_id).first()
 

@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+from typing import Optional
 
 from fastapi import Depends, HTTPException, Path
 from jose import JWTError
@@ -44,10 +45,17 @@ def get_current_user_or_none(token: str = Depends(oauth2_scheme),
     return get_current_user(token=token, db=db)
 
 
-def get_current_profile(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    profile = db.query(Profile).filter(Profile.user_id == user.id).first()
+def get_current_profile_or_none(user: User = Depends(get_current_user), db: Session = Depends(get_db)
+                                ) -> Optional[Profile]:
+    if not user.profile:
+        return None
+    return user.profile
+
+
+def get_current_profile(profile: Optional[Profile] = Depends(get_current_profile_or_none),
+                        db: Session = Depends(get_db)) -> Profile:
     if not profile:
-        raise HTTPException(status_code=400, detail='No profile exists for this user. Create profile first')
+        raise HTTPException(status_code=400, detail='No profile exists for this user')
     return profile
 
 
