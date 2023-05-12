@@ -1,18 +1,20 @@
 import logging
 from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Form, File, UploadFile
 from sqlalchemy.orm import Session
 
 import crud
 from api.v1.dependencies import get_current_profile
+from core import storage
 from core.pagination import CustomParams, CustomPage
 from db.session import get_db
 from models import Profile
-from schemas.posts import PostOutWithLikesSchema
+from schemas.posts import PostOutWithLikesSchema, PostOutSchema
 
 router_common = APIRouter()
 router_create = APIRouter()
+
 logger = logging.getLogger(__name__)
 
 
@@ -79,3 +81,17 @@ def unlike_post(post_id: int,
     return {'detail': 'Post unliked',
             'post_id': post_id,
             'profile_id': profile.id}
+
+
+@router_create.post('/', response_model=PostOutSchema)
+def create_post(text: str = Form(),
+                file: UploadFile = File(None),
+                db: Session = Depends(get_db),
+                profile: Profile = Depends(get_current_profile)):
+    """Create post by authenticated user"""
+    if file:
+        file_uuid = storage.storage_save(db, profile.user_id, file)
+    else:
+        file_uuid = None
+    post = crud.create_post(db, profile.id, text, file_uuid)
+    return post

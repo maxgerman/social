@@ -32,7 +32,7 @@ def filter_posts_query(query: orm.Query,
                        filter_by: Literal['all', 'feed'], profile_id: int):
     if filter_by == 'feed':
         subs_sq = select(Following.profile_whom_id
-                         ).where(Following.profile_by_id == profile_id).subquery()
+                         ).where(Following.profile_by_id == profile_id)
         query = query.filter(Post.profile_id.in_(subs_sq))
 
     elif filter_by == 'all':
@@ -69,3 +69,12 @@ def unlike_post(db: Session, post_id: int, profile_id: int) -> bool:
     db.delete(like)
     db.commit()
     return True
+
+
+def create_post(db: Session, profile_id: int, text: str,
+                file_uuid: UUID = None):
+    post = Post(profile_id=profile_id, text=text, file_uuid=file_uuid)
+    db.add(post)
+    db.commit()
+    db.refresh(post)
+    return post
