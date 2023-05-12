@@ -1,6 +1,5 @@
 import logging
 
-import sqlalchemy.exc
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -24,3 +23,6 @@ class Profile(Base):
     likes_made = relationship('Like', back_populates='profile', foreign_keys=[Like.profile_id])
     following = relationship('Following', back_populates='profile_by', foreign_keys='Following.profile_by_id')
     subscribers = relationship('Following', back_populates='profile_whom', foreign_keys='Following.profile_whom_id')
+
+    def __repr__(self):
+        return f'<Profile {self.id} {self.name}>'
