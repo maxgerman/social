@@ -25,5 +25,5 @@
   - if accessed from profiles route only this profile's posts can be retrieved
 - view one's own likes with info about who liked which post and when (nested objects with joinedload), starting from newest (also paginated)
 - .env settings include config vars to generate first admin_user and sample content:
-    - init_db script creates users, profiles, posts, randomly likes them
+    - init_db script creates one admin user, ordinary users, profiles, posts, randomly likes them
 - like analytics endpoint (likes count in a date range grouped by day), date format is YYYY-MM-DD
