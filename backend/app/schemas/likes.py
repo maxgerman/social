@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from pydantic import BaseModel
 
@@ -19,3 +19,12 @@ class LikeOutSchema(BaseModel):
         json_encoders = {
             datetime: lambda dt: dt.isoformat(),
         }
+
+
+class LikeStatByDayOutSchema(BaseModel):
+    date: date
+    like_count: int = 0
+
+    class Config:
+        orm_mode = True
+        arbitrary_types_allowed = True

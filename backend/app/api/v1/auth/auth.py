@@ -1,32 +1,25 @@
 import logging
-import re
 from datetime import datetime
-from typing import List
 
-from fastapi import Depends, HTTPException, APIRouter, Path, Body, Query
+from fastapi import Depends, HTTPException, APIRouter, Path, Body
 from fastapi.encoders import jsonable_encoder
-from fastapi_mail import FastMail, MessageSchema
-from fastapi_paginate.ext.sqlalchemy import paginate
 from jose import JWTError
-from sqlalchemy import or_
-from sqlalchemy.orm import joinedload
 from sqlalchemy.orm.session import Session
 from starlette.background import BackgroundTasks
-from starlette.responses import RedirectResponse, JSONResponse
+from starlette.responses import JSONResponse
 
-from app.api.v1.dependencies import get_current_user, super_user
+from app import crud
+from app.api.v1.dependencies import get_current_user
 from app.core.auth import authenticate, create_access_token, jwt_decode, verify_last_login
 from app.core.auth import create_pwd_reset_token
 from app.core.config import settings
 from app.core.email import send_email_notification
-from app.core.pagination import CustomPage
 from app.core.security import get_password_hash
 from app.db.session import get_db
 from app.models.users import User
 from app.schemas.notifications import EmailNotificationSchema
-from app.schemas.users import UserInputSchema, UserRegisterSchema, UserOutWithTokenSchema, UserUpdateSchema, \
-    UserOutWithProfileIdSchema, UserOutWithTokenAndProfileIdSchema, UserOutSchema
-from app import crud
+from app.schemas.users import UserInputSchema, UserRegisterSchema, UserOutWithProfileIdSchema, \
+    UserOutWithTokenAndProfileIdSchema, UserOutSchema
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
