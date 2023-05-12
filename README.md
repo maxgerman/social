@@ -2,11 +2,10 @@
 
 ### By Maksym German
 
-[Original task description link](https://drive.google.com/file/d/1lRoKVkBTtQDdNB1Zwaa0tyJS0wkR7iT1/view)
-
 
 # Features:
 
+- the project is using FastAPI, SQLAlchemy, Alembic, PostgreSQL
 - Users registration, profiles created automatically
 - JWT-tokens authentication
 - Email notifications in background with fast responses
