@@ -84,3 +84,35 @@ def get_profile(profile_id: int,
         raise HTTPException(404, 'Profile not found')
     profile.posts_count = crud.get_posts_count_by_profile_id(db, profile.id)
     return profile
+
+
+@router.post('/{profile_id}/follow', status_code=200)
+def follow_profile(profile_id: int,
+                   db: Session = Depends(get_db),
+                   profile: Profile = Depends(get_current_profile)):
+    """Follow profile by id"""
+    if profile_id == profile.id:
+        raise HTTPException(400, 'You cannot follow yourself')
+    profile_to_follow = crud.get_profile_by_id(db, profile_id)
+    if not profile_to_follow:
+        raise HTTPException(404, 'Profile not found')
+    if not crud.follow_profile(db, profile.id, profile_id):
+        raise HTTPException(400, 'This profile is already followed')
+    return {'message': 'profile followed',
+            'profile_id': profile_id}
+
+
+@router.post('/{profile_id}/unfollow', status_code=200)
+def unfollow_profile(profile_id: int,
+                     db: Session = Depends(get_db),
+                     profile: Profile = Depends(get_current_profile)):
+    """Unfollow profile by id"""
+    if profile_id == profile.id:
+        raise HTTPException(400, 'You cannot unfollow yourself')
+    profile_to_unfollow = crud.get_profile_by_id(db, profile_id)
+    if not profile_to_unfollow:
+        raise HTTPException(404, 'Profile not found')
+    if not crud.unfollow_profile(db, profile.id, profile_id):
+        raise HTTPException(400, 'This profile is not followed')
+    return {'message': 'profile unfollowed',
+            'profile_id': profile_id}

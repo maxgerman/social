@@ -1,6 +1,7 @@
 from typing import Optional, Literal
 from uuid import UUID
 
+import sqlalchemy.exc
 from fastapi import HTTPException
 from fastapi_paginate.ext.sqlalchemy import paginate
 from sqlalchemy.orm import Session
@@ -96,4 +97,24 @@ def delete_profile_image(db: Session, profile_id: int) -> bool:
     db.add(profile)
     db.commit()
     db.refresh(profile)
+    return True
+
+
+def follow_profile(db: Session, profile_by_id: int, profile_whom_id: int) -> bool:
+    following = Following(profile_by_id=profile_by_id, profile_whom_id=profile_whom_id)
+    try:
+        db.add(following)
+        db.commit()
+    except sqlalchemy.exc.IntegrityError:
+        return False
+    return True
+
+
+def unfollow_profile(db: Session, profile_by_id: int, profile_whom_id: int) -> bool:
+    following = db.query(Following).filter(Following.profile_by_id == profile_by_id,
+                                           Following.profile_whom_id == profile_whom_id).first()
+    if not following:
+        return False
+    db.delete(following)
+    db.commit()
     return True
