@@ -28,6 +28,11 @@ def get_user_by_id(db: Session, user_id: int) -> User | None:
     return db.query(User).filter(User.id == user_id).first()
 
 
+def get_user_by_email(db: Session, email: str) -> User | None:
+    """Return user by email or None"""
+    return db.query(User).filter(User.email == email).first()
+
+
 def get_user_and_profile_id_by_user_id(db: Session, user_id: int
                                        ) -> tuple[User | None, int | None]:
     """Return user and profile by id or None"""

@@ -5,8 +5,8 @@ import sqlalchemy.exc
 from sqlalchemy import select, func, orm
 from sqlalchemy.orm import Session
 
-from models import Post, Following, Like
 
+from models import Post, Following, Like
 
 def query_all_posts_sorted_by(db: Session, sort_by: Literal['new', 'likes']):
     if sort_by == 'new':
@@ -48,8 +48,11 @@ def get_post_by_id(db: Session, post_id: int) -> Optional[Post]:
 
 def like_post(db: Session, post_id: int, profile_id: int) -> bool:
     like = Like(post_id=post_id, profile_id=profile_id)
-    db.add(like)
+    from crud import like_exists
+    if like_exists(db, post_id, profile_id):
+        return False
     try:
+        db.add(like)
         db.commit()
     except sqlalchemy.exc.IntegrityError as e:
         return False

@@ -9,9 +9,11 @@ from fastapi_mail import ConnectionConfig
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger('multipart').setLevel(logging.WARNING)
+logging.getLogger('faker').setLevel(logging.WARNING)
+logging.getLogger('passlib').setLevel(logging.WARNING)
+
 logger = logging.getLogger(__name__)
 
 env_path = BASE_DIR.parent.parent / 'deploy' / '.env_local'
@@ -73,6 +75,14 @@ class Settings:
         SUPPRESS_SEND=not SEND_EMAILS,
         TEMPLATE_FOLDER=Path(__file__).parent.parent / 'templates'
     )
+
+    FIRST_SUPERUSER_EMAIL: str = os.getenv('FIRST_SUPERUSER_EMAIL')
+    FIRST_SUPERUSER_PASSWORD: str = os.getenv('FIRST_SUPERUSER_PASSWORD')
+    DEFAULT_USER_PASSWORD = FIRST_SUPERUSER_PASSWORD
+
+    NUMBER_OF_USERS = int(os.getenv('NUMBER_OF_USERS'))
+    MAX_POSTS_PER_USER = int(os.getenv('MAX_POSTS_PER_USER'))
+    MAX_LIKES_PER_USER = int(os.getenv('MAX_LIKES_PER_USER'))
 
 
 settings = Settings()
