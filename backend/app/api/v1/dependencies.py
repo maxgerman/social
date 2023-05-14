@@ -7,10 +7,10 @@ from jose import JWTError
 from sqlalchemy.orm import Session, joinedload
 from starlette import status
 
-from app.core.auth import oauth2_scheme, jwt_decode
-from app.db.session import get_db
-from app.models.profiles import Profile
-from app.models.users import User
+from core.auth import oauth2_scheme, jwt_decode
+from db.session import get_db
+from models.profiles import Profile
+from models.users import User
 
 logger = logging.getLogger(__name__)
 

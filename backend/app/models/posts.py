@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, ForeignKey, TIMESTAMP, func, Text
 from sqlalchemy.orm import relationship
 
-from app.db.base_class import Base
-from app.models import Storage
+from db.base_class import Base
+from models import Storage
 
 
 class Post(Base):

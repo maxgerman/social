@@ -2,7 +2,7 @@ from sqlalchemy import orm
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
-from app.core.pagination import CustomParams
+from core.pagination import CustomParams
 from models import Post, Like
 
 

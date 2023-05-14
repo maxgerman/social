@@ -4,8 +4,8 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Enum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
-from app.db.base_class import Base
-from app.models.likes import Like
+from db.base_class import Base
+from models.likes import Like
 
 logger = logging.getLogger(__name__)
 

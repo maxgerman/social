@@ -3,11 +3,11 @@ from fastapi import HTTPException
 from fastapi_paginate.ext.sqlalchemy import paginate
 from sqlalchemy.orm import Session
 
-from app.core.pagination import CustomParams
-from app.core.security import get_password_hash
-from app.models.profiles import Profile
-from app.models.users import User
-from app.schemas.users import UserRegisterSchema, UserUpdateSchema
+from core.pagination import CustomParams
+from core.security import get_password_hash
+from models.profiles import Profile
+from models.users import User
+from schemas.users import UserRegisterSchema, UserUpdateSchema
 
 
 def create_user_and_profile(db: Session, user_in: UserRegisterSchema):

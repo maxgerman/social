@@ -3,7 +3,7 @@ from fastapi_paginate import add_pagination
 from starlette.middleware.cors import CORSMiddleware
 
 from core.config import settings
-from app.api.v1.base import api_router
+from api.v1.base import api_router
 
 
 app = FastAPI(title=settings.PROJECT_TITLE, version=settings.PROJECT_VERSION)
