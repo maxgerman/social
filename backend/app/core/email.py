@@ -1,12 +1,11 @@
-import logging
 import asyncio
+import logging
 
 import fastapi_mail.errors
 from fastapi_mail import MessageSchema, FastMail, schemas
-from starlette.background import BackgroundTasks
 
-from app.core.config import settings
-from app.schemas.notifications import EmailNotificationSchema
+from schemas.notifications import EmailNotificationSchema
+from core.config import settings
 
 logger = logging.getLogger(__name__)
 

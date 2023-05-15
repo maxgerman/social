@@ -9,6 +9,7 @@ from fastapi_mail import ConnectionConfig
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger('multipart').setLevel(logging.WARNING)
 logging.getLogger('faker').setLevel(logging.WARNING)
@@ -17,14 +18,9 @@ logging.getLogger('passlib').setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 env_path = BASE_DIR.parent.parent / 'deploy' / '.env_local'
-if not env_path.exists():
-    env_path = BASE_DIR.parent.parent / 'deploy' / '.env'
-if not env_path.exists():
-    logger.warning(f'env file not found: {env_path}')
-    sys.exit(1)
-
-load_dotenv(env_path)
-logger.debug(f'loaded env from {env_path}')
+if env_path.exists():
+    logger.debug('Loading env from .env_local file (dev environment)')
+    load_dotenv(env_path)
 
 
 class Settings:

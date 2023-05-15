@@ -4,6 +4,7 @@ from sqlalchemy import orm, cast, Date, func
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
+from core.pagination import CustomParams
 from models import Post, Like
 
 

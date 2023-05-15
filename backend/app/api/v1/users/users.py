@@ -3,12 +3,12 @@ import logging
 from fastapi import Depends, HTTPException, APIRouter, Path, Body, Query
 from sqlalchemy.orm.session import Session
 
-from app import crud
-from app.api.v1.dependencies import get_current_user, super_user
-from app.core.pagination import CustomPage, CustomParams
-from app.db.session import get_db
-from app.models.users import User
-from app.schemas.users import UserUpdateSchema, \
+import crud
+from api.v1.dependencies import get_current_user, super_user
+from core.pagination import CustomPage, CustomParams
+from db.session import get_db
+from models.users import User
+from schemas.users import UserUpdateSchema, \
     UserOutWithProfileIdSchema, UserOutSchema, UserActivitySchema
 
 router = APIRouter()

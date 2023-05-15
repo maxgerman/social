@@ -15,18 +15,13 @@ config = context.config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# add base dir parent to python path
-sys.path.append(str(BASE_DIR.parent))
-
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 env_path = BASE_DIR.parent.parent / 'deploy' / '.env_local'
-if not env_path.exists():
-    env_path = BASE_DIR.parent.parent / 'deploy' / '.env'
-if not env_path.exists():
-    logger.warning(f'env file not found: {env_path}')
-    sys.exit(1)
+if env_path.exists():
+    logger.debug('Loading env from .env_local file (dev environment)')
+    load_dotenv(env_path)
 
 load_dotenv(env_path)
 logger.debug(f'loaded env from {env_path}')
@@ -49,8 +44,8 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-from app.models import *
-from app.db.base_class import Base
+from models import *
+from db.base_class import Base
 
 target_metadata = Base.metadata
 

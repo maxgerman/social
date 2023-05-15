@@ -8,17 +8,17 @@ from sqlalchemy.orm.session import Session
 from starlette.background import BackgroundTasks
 from starlette.responses import JSONResponse
 
-from app import crud
-from app.api.v1.dependencies import get_current_user
-from app.core.auth import authenticate, create_access_token, jwt_decode, verify_last_login
-from app.core.auth import create_pwd_reset_token
-from app.core.config import settings
-from app.core.email import send_email_notification
-from app.core.security import get_password_hash
-from app.db.session import get_db
-from app.models.users import User
-from app.schemas.notifications import EmailNotificationSchema
-from app.schemas.users import UserInputSchema, UserRegisterSchema, UserOutWithProfileIdSchema, \
+import crud
+from api.v1.dependencies import get_current_user
+from core.auth import authenticate, create_access_token, jwt_decode, verify_last_login
+from core.auth import create_pwd_reset_token
+from core.config import settings
+from core.email import send_email_notification
+from core.security import get_password_hash
+from db.session import get_db
+from models.users import User
+from schemas.notifications import EmailNotificationSchema
+from schemas.users import UserInputSchema, UserRegisterSchema, UserOutWithProfileIdSchema, \
     UserOutWithTokenAndProfileIdSchema, UserOutSchema
 
 router = APIRouter()

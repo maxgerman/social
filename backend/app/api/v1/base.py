@@ -1,13 +1,13 @@
 from fastapi import APIRouter
 
-from app.api.v1.auth import auth
-from app.api.v1.users import users
-from app.api.v1.profiles import profiles
-from app.api.v1.storage import storage
-from app.api.v1.posts import posts
-from app.api.v1.likes import likes
-from app.api.v1.analytics import analytics
-from app.core.config import settings
+from api.v1.auth import auth
+from api.v1.users import users
+from api.v1.profiles import profiles
+from api.v1.storage import storage
+from api.v1.posts import posts
+from api.v1.likes import likes
+from api.v1.analytics import analytics
+from core.config import settings
 
 api_router = APIRouter()
 url_prefix = settings.API_URL_PREFIX

@@ -9,8 +9,8 @@ from sqlalchemy import select, func, orm
 
 from models import Post, Following
 from schemas.profiles import ProfileUpdateSchema
-from app.core.pagination import CustomParams
-from app.models.profiles import Profile
+from core.pagination import CustomParams
+from models.profiles import Profile
 
 PROFILE_SORTING_TYPE = Literal['new', 'likes', 'posts']
 PROFILE_FILTER_TYPE = Literal['all', 'subbed', 'followers']

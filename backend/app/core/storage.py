@@ -5,7 +5,7 @@ from uuid import uuid4, UUID
 from fastapi import APIRouter, UploadFile
 from sqlalchemy.orm import Session
 
-from app.core.config import settings
+from core.config import settings
 from models import Storage
 
 router = APIRouter()
