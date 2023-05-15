@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Query, Form
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Query, Form, Body
 from sqlalchemy.orm import Session
 
 import crud
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 @router.patch('/', response_model=ProfileOutSchema)
 def update_profile(db: Session = Depends(get_db),
                    profile: Profile = Depends(get_current_profile),
-                   profile_in: ProfileUpdateSchema = Form()):
+                   profile_in: ProfileUpdateSchema = Body()):
     """Update own profile by any user"""
     if not profile_in.dict(exclude_unset=True):
         raise HTTPException(400, 'No data provided')

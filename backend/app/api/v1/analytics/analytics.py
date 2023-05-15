@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlalchemy.orm import Session
 
 import crud
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 def get_like_analytics(*, db: Session = Depends(get_db),
                        user: User = Depends(get_current_user),
                        date_from: str, date_to: str,
-                       params: CustomParams):
+                       params: CustomParams = Body(None)):
     """Get likes analytics (count by grouped by day) by authenticated user"""
     try:
         date_from_date, date_to_date = crud.validate_date_range(date_from, date_to)

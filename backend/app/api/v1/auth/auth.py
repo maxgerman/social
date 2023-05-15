@@ -2,6 +2,7 @@ import logging
 from datetime import datetime
 
 from fastapi import Depends, HTTPException, APIRouter, Path, Body
+from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.encoders import jsonable_encoder
 from jose import JWTError
 from sqlalchemy.orm.session import Session
@@ -18,8 +19,8 @@ from core.security import get_password_hash
 from db.session import get_db
 from models.users import User
 from schemas.notifications import EmailNotificationSchema
-from schemas.users import UserInputSchema, UserRegisterSchema, UserOutWithProfileIdSchema, \
-    UserOutWithTokenAndProfileIdSchema, UserOutSchema
+from schemas.users import UserLoginSchema, UserRegisterSchema, UserOutWithProfileIdSchema, \
+    UserOutWithTokenAndProfileIdSchema, UserOutSchema, UserOutWithTokenSchema
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -47,17 +48,31 @@ def user_register(*, db: Session = Depends(get_db),
 
 
 @router.post('/login', response_model=UserOutWithTokenAndProfileIdSchema)
-def login(*, db: Session = Depends(get_db), form_data: UserInputSchema):
-    user = authenticate(email=form_data.email, password=form_data.password, db=db)
+def login(*, db: Session = Depends(get_db), user_in: UserLoginSchema):
+    user = authenticate(email=user_in.email, password=user_in.password, db=db)
     if not user or not user.is_active:
         raise HTTPException(status_code=400, detail='Incorrect username or password')
-    token = create_access_token(sub=user.id, remember=form_data.remember)
+    token = create_access_token(sub=user.id, remember=user_in.remember)
     user.last_login = datetime.now()
     user.last_activity = datetime.now()
     db.commit()
     user_out = UserOutWithTokenAndProfileIdSchema.from_orm(user)
     user_out.access_token = token
     user_out.profile_id = user.profile.id if user.profile else None
+    return JSONResponse(jsonable_encoder(user_out.dict()))
+
+
+@router.post('/login_docs', response_model=UserOutWithTokenSchema)
+def login_docs(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
+    user = authenticate(email=form_data.username, password=form_data.password, db=db)
+    if not user or not user.is_active:
+        raise HTTPException(status_code=400, detail='Incorrect username or password')
+    token = create_access_token(sub=user.id)
+    user.last_login = datetime.now()
+    user.last_activity = datetime.now()
+    db.commit()
+    user_out = UserOutWithTokenSchema.from_orm(user)
+    user_out.access_token = token
     return JSONResponse(jsonable_encoder(user_out.dict()))
 
 

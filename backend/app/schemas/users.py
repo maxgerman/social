@@ -31,7 +31,7 @@ class UserUpdateSchema(BaseModel):
     password: str = None
 
 
-class UserInputSchema(BaseModel):
+class UserLoginSchema(BaseModel):
     email: str = ''
     password: str = ''
     remember: bool = False
