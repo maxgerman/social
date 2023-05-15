@@ -1,6 +1,5 @@
 import logging
 import os
-import sys
 from logging.config import fileConfig
 from pathlib import Path
 
@@ -23,8 +22,6 @@ if env_path.exists():
     logger.debug('Loading env from .env_local file (dev environment)')
     load_dotenv(env_path)
 
-load_dotenv(env_path)
-logger.debug(f'loaded env from {env_path}')
 
 POSTGRES_USER: str = os.getenv('POSTGRES_USER')
 POSTGRES_PASSWORD: str = os.getenv('POSTGRES_PASSWORD')
@@ -44,7 +41,6 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-from models import *
 from db.base_class import Base
 
 target_metadata = Base.metadata
