@@ -26,9 +26,9 @@ Explore and send request by OpenAPI docs here:
 - email notifications on actions like registration, password reset (sent in background)
 - all outgoing email for a session can be seen in Mailhog web interface (http://31.131.24.222:8025)
 - admin can update users: 
-    ○ email with uniqueness checks and error handling
-    ○ superuser status
-    ○ password (with hashing)
+    - email with uniqueness checks and error handling
+    - superuser status
+    - password (with hashing)
 - .env settings include config vars to generate first admin_user and sample content:
     - init_db script creates one admin user, ordinary users, profiles, posts, randomly likes them according to the settings
 - like analytics endpoint (likes count in a date range grouped by day), date format is YYYY-MM-DD
