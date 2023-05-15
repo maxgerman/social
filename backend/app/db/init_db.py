@@ -5,15 +5,14 @@ import string
 import sqlalchemy.exc
 from faker import Faker
 
-from app import crud
-from app.core.config import settings
-from app.db.session import SessionLocal
+import crud
+from core.config import settings
+from db.session import SessionLocal
 from schemas.users import UserRegisterSchema
 
 fake = Faker()
 
 logger = logging.getLogger('init_db')
-
 
 
 def init_db():
