@@ -15,7 +15,7 @@ class Profile(Base):
     user_id = Column(Integer, ForeignKey('user.id'), nullable=True)
     name = Column(String, nullable=False, default='')
     image_id = Column(UUID(as_uuid=True), nullable=True)
-    gender = Column(String, Enum('MALE', 'FEMALE'), nullable=True)
+    gender = Column(String, Enum('MALE', 'FEMALE', name='gender_enum'), nullable=True)
     bio = Column(String, nullable=False, default='')
 
     user = relationship('User', back_populates='profile')

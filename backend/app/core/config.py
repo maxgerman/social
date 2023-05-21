@@ -32,8 +32,11 @@ class Settings:
     POSTGRES_SERVER: str = os.getenv('POSTGRES_SERVER')
     POSTGRES_PORT: str = os.getenv('POSTGRES_PORT')
     POSTGRES_DB: str = os.getenv('POSTGRES_DB')
+    POSTGRES_DB_TEST: str = os.getenv('POSTGRES_DB_TEST')
     DATABASE_URL: str = f"postgresql://" \
                         f"{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
+    DATABASE_URL_TEST: str = f"postgresql://" \
+                        f"{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB_TEST}"
 
     ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv('ACCESS_TOKEN_EXPIRE_MINUTES'))
     ACCESS_TOKEN_EXPIRE_MINUTES_LONG = int(os.getenv('ACCESS_TOKEN_EXPIRE_MINUTES_LONG'))

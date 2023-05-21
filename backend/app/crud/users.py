@@ -10,7 +10,7 @@ from models.users import User
 from schemas.users import UserRegisterSchema, UserUpdateSchema
 
 
-def create_user_and_profile(db: Session, user_in: UserRegisterSchema):
+def create_user_and_profile(db: Session, user_in: UserRegisterSchema) -> User:
     """Creates user and profile"""
     password_hash = get_password_hash(user_in.password)
     user_db = User(email=user_in.email, password=password_hash)
