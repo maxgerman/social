@@ -10,7 +10,7 @@ Explore and send requests by OpenAPI docs here:
 
 # Features:
 
-- the project is using FastAPI, SQLAlchemy, Alembic, PostgreSQL, Mailhog + Docker Compose
+- the project is using FastAPI, SQLAlchemy, Alembic, PostgreSQL, pytest, Mailhog, Docker Compose
 - Users registration (profiles created automatically)
 - JWT-tokens authentication
 - Users can post, like posts, follow/unfollow other profiles
@@ -34,3 +34,4 @@ Explore and send requests by OpenAPI docs here:
 - like analytics endpoint (likes count in a date range grouped by day), date format is YYYY-MM-DD
 - swagger docs with auth support
 - automatically applies all migrations when started by docker-compose
+- tests with pytest
