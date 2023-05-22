@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from fastapi_paginate.ext.sqlalchemy import paginate
 from sqlalchemy.orm import Session
 
+from core.config import settings
 from core.pagination import CustomParams
 from core.security import get_password_hash
 from models.profiles import Profile
@@ -71,3 +72,17 @@ def update_user_by_id(db: Session, user_id: int, user_in: UserUpdateSchema):
         raise HTTPException(status_code=400, detail="Email already exists")
     db.refresh(user)
     return user
+
+
+def get_or_create_first_superuser(db: Session) -> User:
+    su = get_user_by_email(db, settings.FIRST_SUPERUSER_EMAIL)
+    if not su:
+        su = create_user_and_profile(db, UserRegisterSchema(
+            email=settings.FIRST_SUPERUSER_EMAIL,
+            password=settings.FIRST_SUPERUSER_PASSWORD,
+            repeat_password=settings.FIRST_SUPERUSER_PASSWORD
+        ))
+        su.is_superuser = True
+        db.add(su)
+        db.commit()
+    return su

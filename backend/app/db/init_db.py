@@ -19,19 +19,8 @@ def init_db():
     db = SessionLocal()
     if settings.FIRST_SUPERUSER_EMAIL:
         logger.info('Creating superuser')
-        user = crud.get_user_by_email(db, email=settings.FIRST_SUPERUSER_EMAIL)
-        if not user:
-            user = crud.create_user_and_profile(db, UserRegisterSchema(
-                email=settings.FIRST_SUPERUSER_EMAIL,
-                password=settings.FIRST_SUPERUSER_PASSWORD,
-                repeat_password=settings.FIRST_SUPERUSER_PASSWORD,
-            ))
-            user.is_superuser = True
-            db.add(user)
-            db.commit()
-            logger.info('Superuser created')
-        else:
-            logger.info('Superuser already exists')
+        su = crud.get_or_create_first_superuser(db)
+        logger.info('Superuser created')
     else:
         logger.info('Superuser not created')
 

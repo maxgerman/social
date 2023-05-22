@@ -51,7 +51,7 @@ def user_register(*, db: Session = Depends(get_db),
 def login(*, db: Session = Depends(get_db), user_in: UserLoginSchema):
     user = authenticate(email=user_in.email, password=user_in.password, db=db)
     if not user or not user.is_active:
-        raise HTTPException(status_code=400, detail='Incorrect username or password')
+        raise HTTPException(status_code=401, detail='Incorrect email or password')
     token = create_access_token(sub=user.id, remember=user_in.remember)
     user.last_login = datetime.now()
     user.last_activity = datetime.now()
