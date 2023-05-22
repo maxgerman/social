@@ -29,9 +29,10 @@ Explore and send requests by OpenAPI docs here:
     - email with uniqueness checks and error handling
     - superuser status
     - password (with hashing)
-- .env settings include config vars to generate first admin_user and sample content:
-    - init_db script creates one admin user, ordinary users, profiles, posts, randomly likes them according to the settings
+- .env settings include config vars to generate first admin user and sample content:
+    - init_db script creates one admin user, ordinary users, profiles, posts, randomly likes them according to the settings NUMBER_OF_USERS,
+    MAX_POSTS_PER_USER, MAX_LIKES_PER_USER 
 - like analytics endpoint (likes count in a date range grouped by day), date format is YYYY-MM-DD
-- swagger docs with auth support
+- Swagger docs with auth support
 - automatically applies all migrations when started by docker-compose
 - tests with pytest
