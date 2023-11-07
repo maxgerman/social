@@ -23,7 +23,7 @@ The live demo is running and has some data generated.
 - view one's own likes with info about who liked which post and when (nested objects with joinedload), starting from newest
 - pagination (size, page, total, total_pages, current_page)
 - email notifications on actions like registration, password reset (sent in background)
-- all outgoing email for a session can be seen in Mailhog web interface (http://31.131.24.222:8025)
+- all outgoing email for a session can be seen in Mailhog web interface
 - admin can update users: 
     - email with uniqueness checks and error handling
     - superuser status
