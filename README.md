@@ -4,8 +4,7 @@
 
 # Demo:
 The live demo is running and has some data generated.
-Explore and send requests by OpenAPI docs here:
-[http://31.131.24.222:8000/docs](http://31.131.24.222:8000/docs)
+
 
 
 # Features:
